@@ -532,12 +532,10 @@ function renderStats() {
 }
 
 // ── SCAN ──
-let scanPhase = 'idle';
 let scannedFood = null;
 let modifiedValues = {};
 
 function renderScanIdle() {
-  scanPhase = 'idle';
   document.getElementById('scan-content').innerHTML = `
     <div class="scan-idle">
       <div class="scan-ring-outer">
@@ -556,7 +554,6 @@ function renderScanIdle() {
 }
 
 function startScan() {
-  scanPhase = 'scanning';
   document.getElementById('scan-content').innerHTML = `
     <div style="display:flex;flex-direction:column;align-items:center;padding-top:32px;animation:fadeUp 0.3s ease-out">
       <div class="scanner-area">
@@ -577,8 +574,6 @@ function startScan() {
 
 // Inicializa sliders y actualizaciones
 function renderResult() {
-  scanPhase = 'result';
-
   const keys = Object.keys(scannedFood.nutrients).filter(k => k !== 'calories' && k !== 'vitamins');
 
   const sliders = keys.map(k => {
@@ -599,18 +594,13 @@ function renderResult() {
       <div style="position:relative">
   <input type="range" id="range-${k}" min="0" max="${nutrientMax[k]}" step="0.5" value="${cur}" 
     oninput="updateSlider('${k}', this.value)" style="width:100%;">
-  <div class="slider-fill" id="fill-${k}" style="
-    position:absolute;left:0;top:50%;height:6px;transform:translateY(-50%);
-    background:var(--primary);border-radius:4px;width:${(cur/nutrientMax[k])*100}%;
-    pointer-events:none;"></div>
   <div class="slider-diff" style="font-size:10px;margin-top:4px;color:${diff>0?'var(--primary)':diff<0?'var(--accent)':''}">${diff !== 0 ? (diff>0?'+':'')+diff.toFixed(1) : ''}</div>
 </div>
     </div>`;
   }).join('');
 
   // Contador de calorías
-  const calWidth = (modifiedValues.calories/nutrientMax.calories)*100;
-const caloriesDisplay = `
+  const caloriesDisplay = `
   <div class="slider-group" style="margin-top:40px; margin-bottom:18px">
     <div class="slider-header" style="display:flex;justify-content:space-between;align-items:center">
       <span class="slider-label">Calorías (kcal)</span>
@@ -637,6 +627,15 @@ const caloriesDisplay = `
   <button class="save-btn" style="flex:1" onclick="saveFood()">Aplicar modificación</button>
 </div>
     </div>`;
+
+// Actualiza sliders visualmente al cargar
+Object.keys(scannedFood.nutrients).forEach(k => {
+  if (k !== 'calories' && k !== 'vitamins') {
+    updateSlider(k, modifiedValues[k]);
+  }
+});
+
+
 }
 
 function updateSlider(key, value) {
@@ -645,13 +644,16 @@ function updateSlider(key, value) {
   // Actualiza valor visual
   document.getElementById('sv-' + key).textContent = modifiedValues[key];
 
-  // Actualiza barra de progreso verde
-  const fill = document.getElementById('fill-' + key);
-  fill.style.width = (modifiedValues[key]/nutrientMax[key])*100 + '%';
+  // Calcula porcentaje
+  const perc = (modifiedValues[key] / nutrientMax[key]) * 100;
+
+  // Actualiza color del slider usando gradient
+  const slider = document.getElementById('range-' + key);
+  slider.style.background = `linear-gradient(to right, var(--primary) 0%, var(--primary) ${perc}%, var(--border) ${perc}%, var(--border) 100%)`;
 
   // 🔹 Actualiza diferencia debajo de la barra
   const diff = modifiedValues[key] - scannedFood.nutrients[key];
-  const diffEl = document.querySelector(`#range-${key}`).parentElement.querySelector('.slider-diff');
+  const diffEl = slider.parentElement.querySelector('.slider-diff');
   if (diffEl) {
     diffEl.textContent = (diff > 0 ? '+' : '') + diff.toFixed(1);
     diffEl.style.color = diff > 0 ? 'var(--primary)' : diff < 0 ? 'var(--accent)' : '';
@@ -669,26 +671,6 @@ function resetSlider(key) {
   updateSlider(key, orig);
 }
 
-// Reset todos los sliders
-function resetAllSliders() {
-  ['protein','fat','carbs'].forEach(k => {
-    const orig = scannedFood.nutrients[k];
-    document.getElementById('range-' + k).value = orig;
-    updateSlider(k, orig);
-  });
-}
-
-
-
-// ── Rellenar slider verde según porcentaje ──
-function updateSliderBackground(key) {
-  const slider = document.getElementById('range-' + key);
-  const val = slider.value;
-  const max = slider.max;
-  const perc = (val / max) * 100;
-  slider.style.background = `linear-gradient(to right, var(--primary) 0%, var(--primary) ${perc}%, var(--border) ${perc}%, var(--border) 100%)`;
-}
-
 function saveFood() {
   foodLog.unshift({
     id: Date.now().toString(),
@@ -696,7 +678,11 @@ function saveFood() {
     date: new Date().toISOString().split('T')[0],
     nutrients: {...scannedFood.nutrients},
     modified: {...modifiedValues}
+    
   });
+
+  // Mostrar alerta al usuario
+  alert(`Alimento modificado. Que aproveche! ✅`);
 
   document.getElementById('scan-content').innerHTML = `
     <div class="saved-check">
@@ -728,9 +714,20 @@ function renderRecs() {
 }
 
 // ── PROFILE ──
+
+let userProfile = {
+  name: "Cloe S.",
+  age: 22,
+  weight: 58, // kg
+    height: 170, // cm
+  sex: "Femenino",
+  goal: "Ganar músculo",
+  activity: "Moderada-Alta"
+};
+
 function renderProfile() {
   const total = foodLog.length;
-  // Most adjusted nutrient
+  // Calcula el nutriente más ajustado
   const diffs = {protein:0,fat:0,carbs:0,vitamins:0,calories:0};
   foodLog.forEach(e => {
     for(const k in e.nutrients) diffs[k] += Math.abs(e.modified[k] - e.nutrients[k]);
@@ -741,16 +738,44 @@ function renderProfile() {
   document.getElementById('profile-content').innerHTML = `
     <div class="card" style="margin-top:8px">
       <div class="profile-header">
-        <div class="avatar">A</div>
-        <div>
-          <div class="profile-name">Alejandro M.</div>
-          <div class="profile-meta">Objetivo: Ganar músculo</div>
-          <div class="profile-meta">Actividad: Moderada-Alta</div>
-        </div>
+        <div class="avatar">${userProfile.name[0]}</div>
+        <div style="flex:1; display:flex; flex-direction:column; gap:4px">
+          <input id="profile-name" type="text" value="${userProfile.name}" style="font-size:16px; font-weight:600; border:none; border-bottom:1px solid var(--border); background:transparent; outline:none;">
+          <input id="profile-age" type="number" value="${userProfile.age}" placeholder="Edad" style="font-size:12px; border:none; border-bottom:1px solid var(--border); background:transparent; outline:none;">
+          <input id="profile-weight" type="number" value="${userProfile.weight}" placeholder="Peso (kg)" style="font-size:12px; border:none; border-bottom:1px solid var(--border); background:transparent; outline:none;">
+          <input id="profile-height" type="number" value="${userProfile.height}" placeholder="Altura (cm)" style="font-size:12px; border:none; border-bottom:1px solid var(--border); background:transparent; outline:none;">
+          <select id="profile-sex" style="font-size:12px; border:none; border-bottom:1px solid var(--border); background:transparent; outline:none;">
+            <option ${userProfile.sex==="Masculino"?"selected":""}>Masculino</option>
+            <option ${userProfile.sex==="Femenino"?"selected":""}>Femenino</option>
+            <option ${userProfile.sex==="Otro"?"selected":""}>Otro</option>
+          </select>
+
+<div style="margin-top:4px">
+  <label style="font-size:10px; font-weight:500">Objetivo</label>
+  <select id="profile-goal" style="font-size:12px; border:none; border-bottom:1px solid var(--border); background:transparent; outline:none;">
+    <option ${userProfile.goal==="Ganar músculo"?"selected":""}>Ganar músculo</option>
+    <option ${userProfile.goal==="Perder peso"?"selected":""}>Perder peso</option>
+    <option ${userProfile.goal==="Mantener peso"?"selected":""}>Mantener peso</option>
+    <option ${userProfile.goal==="Salud general"?"selected":""}>Salud general</option>
+  </select>
+</div>
+
+<div style="margin-top:4px">
+  <label style="font-size:10px; font-weight:500">Actividad</label>
+  <select id="profile-activity" style="font-size:12px; border:none; border-bottom:1px solid var(--border); background:transparent; outline:none;">
+    <option ${userProfile.activity==="Baja"?"selected":""}>Baja</option>
+    <option ${userProfile.activity==="Moderada"?"selected":""}>Moderada</option>
+    <option ${userProfile.activity==="Moderada-Alta"?"selected":""}>Moderada-Alta</option>
+    <option ${userProfile.activity==="Alta"?"selected":""}>Alta</option>
+  </select>
+</div>
+
+ </div>
       </div>
+      <button class="save-btn" onclick="saveProfile()" style="margin-top:12px">Guardar cambios</button>
     </div>
 
-    <div class="stats-grid">
+    <div class="stats-grid" style="margin-top:12px">
       <div class="stat-card">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 002-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 00-5 5v6c0 1.1.9 2 2 2h3z"/></svg>
         <div class="stat-val">${total}</div>
@@ -772,14 +797,25 @@ function renderProfile() {
         <div class="stat-label">Nivel actividad</div>
       </div>
     </div>
-
-    <div class="settings-list" style="margin-top:12px">
-      <button class="settings-item">Editar perfil</button>
-      <button class="settings-item">Objetivos nutricionales</button>
-      <button class="settings-item">Notificaciones</button>
-      <button class="settings-item">Acerca de Foodify</button>
-    </div>`;
+  `;
 }
+
+function saveProfile() {
+  userProfile.name = document.getElementById('profile-name').value;
+  userProfile.age = parseInt(document.getElementById('profile-age').value);
+  userProfile.weight = parseInt(document.getElementById('profile-weight').value);
+ userProfile.height = parseInt(document.getElementById('profile-height').value);
+  userProfile.sex = document.getElementById('profile-sex').value;
+  userProfile.goal = document.getElementById('profile-goal').value;
+  userProfile.activity = document.getElementById('profile-activity').value;
+
+  // Actualiza avatar con inicial
+  const avatarEl = document.querySelector('.avatar');
+  if (avatarEl) avatarEl.textContent = userProfile.name[0];
+
+  alert('Perfil actualizado ✅');
+}
+
 
 // ── INIT ──
 renderScanIdle();

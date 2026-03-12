@@ -5,67 +5,78 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Foodify - Nutrición Inteligente</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-
-
 :root{
-  --bg: #f5f0e8;
+  --bg: #9eb29c;
   --fg: #1e2a22;
-  --card: #ede7db;
-  --card-hover: #e6dfd2;
-  --primary: #3d7a5f;
-  --primary-light: #4a9572;
+  --card: #efebe0;
+  --card-hover: #e1f3cf;
+  --primary: #3c5d37;
+  --bttn: #d6ddc3;
+  --primary-light: #56a269;
   --primary-fg: #f5f0e8;
   --primary-glow: rgba(61,122,95,0.25);
   --secondary: #e8dcc8;
-  --muted: #9a9487;
-  --accent: #5a9e7a;
-  --scanner: #4ccea0;
+  --muted: #514837;
+  --subtitle: #ffffff;
+  --title: #ffffff;
+  --accent: hsl(148, 19%, 38%);
+  --scanner: #469922;
   --border: #d9d1c2;
   --wood: #6b5240;
   --cream: #faf6ef;
   --green-soft: #72b08a;
-  --radius: 16px;
+  --radius: 10px;
   --shadow-card: 0 2px 16px -4px rgba(30,42,34,0.07);
   --shadow-elevated: 0 8px 32px -8px rgba(30,42,34,0.12);
   --shadow-glow: 0 0 24px -4px rgba(61,122,95,0.25);
-  --font-display: 'Playfair Display', serif;
+  --font-display: 'Montserrat', serif;
   --font-body: 'DM Sans', sans-serif;
 }
 
-body{
+body {
   font-family: var(--font-body);
-  background: #2a2a2a;
+  /* Fondo degradado tipo aurora con colores verdes, marrón-anaranjado y beige */
+  background: linear-gradient(135deg,#537759, #8aaa7e, #ada189, #e9d3ad, #6b5240);
+  background-size: 400% 400%;
+  animation: auroraBG 15s ease infinite;
   color: var(--fg);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  min-height:100vh;
-  -webkit-font-smoothing:antialiased;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Animación suave tipo aurora */
+@keyframes auroraBG {
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
 }
 
 .phone{
   width:100%;
-  max-width:430px;
+  max-width:480px;
   height:100dvh;
   max-height:932px;
-  background:var(--bg);
+  background: rgba(250, 246, 239, 0.0);
   position:relative;
   overflow:hidden;
   display:flex;
   flex-direction:column;
   border-radius:0;
+  backdrop-filter: blur(8px); /* efecto vidrio suave */
 }
 
 @media(min-width:500px){
   .phone{
-    border-radius:40px;
+    border-radius:10px;
     height:min(95vh,900px);
-    box-shadow: var(--shadow-elevated), 0 0 0 8px #1a1a1a;
+    //box-shadow: var(--shadow-elevated); /* solo sombra suave, sin borde negro */
   }
 }
 
@@ -104,39 +115,46 @@ body{
   to{opacity:1;transform:translateY(0)}
 }
 
-h1.page-title{
-  font-family:var(--font-display);
-  font-size:26px;
-  font-weight:700;
-  color:var(--fg);
-  margin-bottom:2px;
+h1.page-title {
+  font-family: 'Montserrat', sans-serif; /* o la que quieras */
+  color:var(--title);
+  font-weight: 300; /* más fina */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.45); /* sombra sutil */
 }
 .page-subtitle{
   font-size:13px;
-  color:var(--muted);
+  color:var(--subtitle);
   margin-bottom:20px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.45); /* sombra sutil */
 }
 
 .page-title.foodify {
   font-family: 'Montserrat', sans-serif;
-   font-weight: 700;                      /* Negrita */
-  letter-spacing: 1.5px;                 /* Espacio entre letras */
-  color: #3d7a5f;                        /* Color personalizado (verde principal) */
+   font-weight: 800;                      /* Negrita */
+  letter-spacing: 2px;                 /* Espacio entre letras */
+  color: #2d4437;                        /* Color personalizado (verde principal) */
   margin-top: 24px; 
   text-align: center;                     /* Centrar el título */
+   text-shadow: 1px 1px 2px rgba(236, 236, 236, 0.45); /* sombra sutil */
 }
 
 /* Bottom nav */
 .bottom-nav{
   position:absolute;
-  bottom:0;left:0;right:0;
+  bottom:0;
+  left:0;
+  right:0;
   display:flex;
   align-items:center;
   justify-content:space-around;
-  background:rgba(250,246,239,0.95);
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
-  border-top:1px solid var(--border);
+
+  background: rgba(250, 246, 239, 0.85); /* más transparente */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  border-top: 1px solid rgba(255,255,255,0.25); /* borde suave */
+  box-shadow: 0 -8px 24px -8px rgba(30,42,34,0.15); /* sombra superior */
+
   padding:8px 8px 20px;
   z-index:10;
 }
@@ -148,21 +166,40 @@ h1.page-title{
   transition:all 0.2s;
   font-family:var(--font-body);
 }
-.nav-btn.active{color:var(--primary);transform:scale(1.05)}
+.nav-btn.active{color:rgb(89, 145, 72);transform:scale(1.05)}
 .nav-btn svg{width:22px;height:22px}
 .nav-btn span{font-size:10px;font-weight:600}
 
 /* Cards */
-.card{
-  background:var(--card);
-  border-radius:var(--radius);
-  padding:16px;
-  box-shadow:var(--shadow-card);
-  margin-bottom:12px;
-  transition: transform 0.15s;
+.card {
+  background: rgba(250, 246, 239, 0.5); /* translúcido tipo phone */
+  backdrop-filter: blur(8px);           /* efecto vidrio suave */
+  -webkit-backdrop-filter: blur(8px);   /* soporte Safari */
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow-elevated);   /* sombra más destacada como phone */
+  margin-bottom: 12px;
+  transition: transform 0.15s, background 0.3s;
 }
 .card:active{transform:scale(0.98)}
 
+.rec-card{
+  transition: all 0.18s ease;
+}
+
+.card{
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.card:hover{
+  transform: translateY(-3px); /* se eleva */
+  box-shadow: 0 14px 34px -12px rgba(30,42,34,0.35); /* sombra más fuerte */
+}
+
+.rec-card:hover{
+  transform: translateY(-3px); /* se eleva */
+  box-shadow: 0 14px 34px -12px rgba(30,42,34,0.35); /* sombra más fuerte */
+}
 /* ============ STATS ============ */
 .chart-container{
   display:flex;
@@ -206,21 +243,21 @@ h1.page-title{
 .scan-idle{display:flex;flex-direction:column;align-items:center;padding-top:40px}
 
 .scan-ring-outer{
-  position:relative;width:192px;height:192px;margin-bottom:32px;
+  position:relative;width:220px;height:220px;margin-bottom:32px;
 }
 .pulse-ring{
   position:absolute;inset:0;border-radius:50%;
-  background:rgba(61,122,95,0.08);
+  background:rgba(219, 234, 207, 0.08);
   animation:pulseRing 2s ease-out infinite;
 }
 .pulse-ring:nth-child(2){inset:16px;animation-delay:0.5s;background:rgba(61,122,95,0.12)}
 .scan-btn{
   position:absolute;inset:32px;border-radius:50%;
-  background:var(--primary);border:none;cursor:pointer;
+  background:var(--bttn);border:none;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
   box-shadow:var(--shadow-glow);
   transition:transform 0.15s;
-  color:var(--primary-fg);
+  color:rgb(164, 144, 98);
 }
 .scan-btn:active{transform:scale(0.93)}
 .scan-btn svg{width:36px;height:36px}
@@ -289,14 +326,32 @@ input[type="range"]::-webkit-slider-thumb{
 }
 
 .save-btn{
-  width:100%;padding:14px;border:none;border-radius:var(--radius);
-  background:var(--primary);color:var(--primary-fg);
-  font-family:var(--font-body);font-size:14px;font-weight:600;
-  cursor:pointer;box-shadow:var(--shadow-glow);
-  transition:all 0.15s;margin-top:8px;
-}
-.save-btn:active{transform:scale(0.97)}
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:var(--radius);
+  background:var(--primary);
+  color:var(--primary-fg);
+  font-family:var(--font-body);
+  font-size:14px;
+  font-weight:500;
+  cursor:pointer;
 
+  box-shadow: 0 6px 18px -6px rgba(30,42,34,0.35); /* sombra */
+
+  transition:all 0.15s;
+  margin-top:8px;
+}
+
+.save-btn:hover{
+  transform:translateY(-2px);
+  box-shadow: 0 10px 26px -8px rgba(30,42,34,0.45);
+}
+
+.save-btn:active{
+  transform:translateY(1px);
+  box-shadow: 0 4px 12px -6px rgba(30,42,34,0.4);
+}
 /* Saved confirmation */
 .saved-check{
   display:flex;flex-direction:column;align-items:center;
@@ -310,6 +365,23 @@ input[type="range"]::-webkit-slider-thumb{
 }
 .saved-title{font-weight:600;font-size:16px;margin-bottom:4px}
 .saved-sub{font-size:13px;color:var(--muted)}
+
+/* Tarjetas translúcidas con sombra intensa siempre */
+.hover-card {
+  background: #ccbe8b93; /* más translúcido */
+  backdrop-filter: blur(12px);           /* efecto vidrio difuminado */
+  border-radius: var(--radius);
+  padding: 12px;
+  cursor: pointer;
+  box-shadow: var(--shadow-glow);
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+}
+
+/* Hover */
+.hover-card:hover {
+  transform: scale(1.03);
+  box-shadow: var(--shadow-glow);
+}
 
 /* ============ RECOMMENDATIONS ============ */
 .rec-card{
@@ -349,6 +421,35 @@ input[type="range"]::-webkit-slider-thumb{
   padding:14px;box-shadow:var(--shadow-card);
   display:flex;flex-direction:column;align-items:center;text-align:center;
 }
+
+.profile-input-card {
+  background: rgba(250, 246, 239, 0.6); /* color claro translúcido */
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow-glow); /* sombra suave */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.profile-input-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px -8px rgba(30,42,34,0.35);
+}
+
+.profile-input-card input,
+.profile-input-card select {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
 .stat-card svg{color:var(--primary);margin-bottom:8px}
 .stat-val{font-size:18px;font-weight:700}
 .stat-label{font-size:10px;color:var(--muted);margin-top:2px}
@@ -409,6 +510,7 @@ input[type="range"]::-webkit-slider-thumb{
     <!-- PROFILE -->
     <div id="sec-profile" class="section">
       <h1 class="page-title">Perfil</h1>
+      <p class="page-subtitle">Cuéntanos sobre ti</p>
       <div id="profile-content"></div>
     </div>
   </div>
@@ -497,10 +599,26 @@ function switchTab(tab) {
 // ── STATS ──
 function renderStats() {
   // Weekly chart
-  const totals = {protein:0,fat:0,carbs:0,vitamins:0,calories:0};
-  foodLog.forEach(e => {
-    for(const k in e.modified) totals[k] += e.modified[k];
-  });
+  // calcular fecha hace 7 días
+const today = new Date();
+const weekAgo = new Date();
+weekAgo.setDate(today.getDate() - 7);
+
+const totals = {protein:0,fat:0,carbs:0,vitamins:0,calories:0};
+
+// filtrar solo alimentos de esta semana
+const weeklyFoods = foodLog.filter(e => {
+  const d = new Date(e.date);
+  return d >= weekAgo && d <= today;
+});
+
+// sumar nutrientes
+weeklyFoods.forEach(e => {
+  for(const k in e.modified){
+    totals[k] += e.modified[k];
+  }
+});
+  
   const maxV = Math.max(...Object.values(totals), 1);
   const keys = Object.keys(totals);
 
@@ -625,7 +743,7 @@ function renderResult() {
         ${caloriesDisplay}
       </div>
 <div style="display:flex;gap:12px;margin-top:12px">
-  <button class="save-btn" style="flex:1;background:#ccc;color:#333" onclick="renderScanIdle()">Cancelar</button>
+  <button class="save-btn" style="flex:1;background:#b8b8b8;color:#333" onclick="renderScanIdle()">Cancelar</button>
   <button class="save-btn" style="flex:1" onclick="saveFood()">Aplicar modificación</button>
 </div>
     </div>`;
@@ -718,9 +836,9 @@ function renderRecs() {
 // ── PROFILE ──
 
 let userProfile = {
-  name: "Cloe S.",
-  age: 22,
-  weight: 58, // kg
+  name: "Ana",
+  age: 20,
+  weight: 55, // kg
     height: 170, // cm
   sex: "Femenino",
   goal: "Ganar músculo",
@@ -729,7 +847,6 @@ let userProfile = {
 
 function renderProfile() {
   const total = foodLog.length;
-  // Calcula el nutriente más ajustado
   const diffs = {protein:0,fat:0,carbs:0,vitamins:0,calories:0};
   foodLog.forEach(e => {
     for(const k in e.nutrients) diffs[k] += Math.abs(e.modified[k] - e.nutrients[k]);
@@ -741,66 +858,122 @@ function renderProfile() {
     <div class="card" style="margin-top:8px">
       <div class="profile-header">
         <div class="avatar">${userProfile.name[0]}</div>
-        <div style="flex:1; display:flex; flex-direction:column; gap:4px">
-          <input id="profile-name" type="text" value="${userProfile.name}" style="font-size:16px; font-weight:600; border:none; border-bottom:1px solid var(--border); background:transparent; outline:none;">
-          <input id="profile-age" type="number" value="${userProfile.age}" placeholder="Edad" style="font-size:12px; border:none; border-bottom:1px solid var(--border); background:transparent; outline:none;">
-          <input id="profile-weight" type="number" value="${userProfile.weight}" placeholder="Peso (kg)" style="font-size:12px; border:none; border-bottom:1px solid var(--border); background:transparent; outline:none;">
-          <input id="profile-height" type="number" value="${userProfile.height}" placeholder="Altura (cm)" style="font-size:12px; border:none; border-bottom:1px solid var(--border); background:transparent; outline:none;">
-          <select id="profile-sex" style="font-size:12px; border:none; border-bottom:1px solid var(--border); background:transparent; outline:none;">
-            <option ${userProfile.sex==="Masculino"?"selected":""}>Masculino</option>
-            <option ${userProfile.sex==="Femenino"?"selected":""}>Femenino</option>
-            <option ${userProfile.sex==="Otro"?"selected":""}>Otro</option>
-          </select>
 
-<div style="margin-top:4px">
-  <label style="font-size:10px; font-weight:500">Objetivo</label>
-  <select id="profile-goal" style="font-size:12px; border:none; border-bottom:1px solid var(--border); background:transparent; outline:none;">
-    <option ${userProfile.goal==="Ganar músculo"?"selected":""}>Ganar músculo</option>
-    <option ${userProfile.goal==="Perder peso"?"selected":""}>Perder peso</option>
-    <option ${userProfile.goal==="Mantener peso"?"selected":""}>Mantener peso</option>
-    <option ${userProfile.goal==="Salud general"?"selected":""}>Salud general</option>
-  </select>
+
+<div style="flex:1; display:flex; flex-direction:column; gap:6px; padding:4px; box-sizing:border-box; overflow:hidden">
+  
+<!-- Nombre + Edad en horizontal -->
+<div style="display:flex; gap:6px; width:100%;">
+  <!-- Nombre -->
+  <div class="hover-card" style="display:flex; align-items:center; gap:4px; padding:8px; flex:2; min-width:0;">
+    <span style="font-size:12px; color:var(--muted); flex:0 0 auto;">Nombre:</span>
+    <input id="profile-name" type="text" value="${userProfile.name}" 
+      style="font-size:14px; font-family:var(--font-body); border:none; outline:none; background:transparent; flex:1; min-width:0;">
+  </div>
+
+  <!-- Edad -->
+  <div class="hover-card" style="display:flex; align-items:center; gap:4px; padding:8px; flex:1.5; min-width:0;">
+    <span style="font-size:12px; color:var(--muted); flex:0 0 auto;">Edad:</span>
+    <input id="profile-age" type="number" value="${userProfile.age}" 
+      style="font-size:14px; font-family:var(--font-body); border:none; outline:none; background:transparent; flex:1; min-width:0;">
+  </div>
 </div>
 
-<div style="margin-top:4px">
-  <label style="font-size:10px; font-weight:500">Actividad</label>
-  <select id="profile-activity" style="font-size:12px; border:none; border-bottom:1px solid var(--border); background:transparent; outline:none;">
-    <option ${userProfile.activity==="Baja"?"selected":""}>Baja</option>
-    <option ${userProfile.activity==="Moderada"?"selected":""}>Moderada</option>
-    <option ${userProfile.activity==="Moderada-Alta"?"selected":""}>Moderada-Alta</option>
-    <option ${userProfile.activity==="Alta"?"selected":""}>Alta</option>
-  </select>
+<!-- Peso + Altura  -->
+<div style="display:flex; gap:6px; width:100%;">
+  <div class="hover-card" style="display:flex; align-items:center; gap:4px; padding:8px; flex:1; min-width:0;">
+    <span style="font-size:12px; color:var(--muted); flex:0 0 auto;">Peso:</span>
+    <input id="profile-weight" type="number" value="${userProfile.weight}" placeholder="kg" 
+      style="font-size:14px; font-family:var(--font-body); border:none; outline:none; background:transparent; flex:1; min-width:0;">
+  </div>
+
+  <div class="hover-card" style="display:flex; align-items:center; gap:4px; padding:8px; flex:1; min-width:0;">
+    <span style="font-size:12px; color:var(--muted); flex:0 0 auto;">Altura:</span>
+    <input id="profile-height" type="number" value="${userProfile.height}" placeholder="cm" 
+      style="font-size:14px; font-family:var(--font-body); border:none; outline:none; background:transparent; flex:1; min-width:0;">
+  </div>
+
+
 </div>
 
- </div>
+<!-- Sexo -->
+<div style="display:flex;gap:6px; width:100%;">
+  <div class="hover-card" style="display:flex;align-items:center;gap:4px;padding:8px; flex:1; min-width:0;">
+    <span style="font-size:12px; color:var(--muted); flex:0 0 auto;">Sexo:</span>
+    <select id="profile-sex" style="font-size:14px; font-family:var(--font-body); border:none; outline:none; background:transparent; flex:1; min-width:0;">
+      <option ${userProfile.sex==="Masculino"?"selected":""}>Masculino</option>
+      <option ${userProfile.sex==="Femenino"?"selected":""}>Femenino</option>
+      <option ${userProfile.sex==="Otro"?"selected":""}>Otro</option>
+    </select>
+  </div>
+</div>
+
+
+</div>
+        
       </div>
       <button class="save-btn" onclick="saveProfile()" style="margin-top:12px">Guardar cambios</button>
     </div>
 
     <div class="stats-grid" style="margin-top:12px">
       <div class="stat-card">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 002-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 00-5 5v6c0 1.1.9 2 2 2h3z"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 002-2V2"/>
+          <path d="M7 2v20"/>
+          <path d="M21 15V2v0a5 5 0 00-5 5v6c0 1.1.9 2 2 2h3z"/>
+        </svg>
         <div class="stat-val">${total}</div>
         <div class="stat-label">Alimentos modificados</div>
       </div>
+
       <div class="stat-card">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
         <div class="stat-val">14</div>
         <div class="stat-label">Días activo</div>
       </div>
-      <div class="stat-card">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-        <div class="stat-val" style="font-size:14px">${topName}</div>
-        <div class="stat-label">Más ajustado</div>
+
+      <!-- Objetivo editable -->
+      <div class="stat-card hover-card">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <circle cx="12" cy="12" r="6"/>
+          <circle cx="12" cy="12" r="2"/>
+        </svg>
+        <div class="stat-val">
+          <select id="profile-goal" style="width:100%; border:none; outline:none; background:transparent; font-size:14px;">
+            <option ${userProfile.goal==="Ganar músculo"?"selected":""}>Ganar músculo</option>
+            <option ${userProfile.goal==="Perder peso"?"selected":""}>Perder peso</option>
+            <option ${userProfile.goal==="Mantener peso"?"selected":""}>Mantener peso</option>
+            <option ${userProfile.goal==="Salud general"?"selected":""}>Salud general</option>
+          </select>
+        </div>
+        <div class="stat-label">Objetivo</div>
       </div>
-      <div class="stat-card">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        <div class="stat-val">Alta</div>
-        <div class="stat-label">Nivel actividad</div>
+
+      <!-- Actividad editable -->
+      <div class="stat-card hover-card">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+        <div class="stat-val">
+          <select id="profile-activity" style="width:100%; border:none; outline:none; background:transparent; font-size:14px;">
+            <option ${userProfile.activity==="Baja"?"selected":""}>Baja</option>
+            <option ${userProfile.activity==="Moderada"?"selected":""}>Moderada</option>
+            <option ${userProfile.activity==="Moderada-Alta"?"selected":""}>Moderada-Alta</option>
+            <option ${userProfile.activity==="Alta"?"selected":""}>Alta</option>
+          </select>
+        </div>
+        <div class="stat-label">Actividad</div>
       </div>
     </div>
   `;
 }
+
 
 function saveProfile() {
   userProfile.name = document.getElementById('profile-name').value;
